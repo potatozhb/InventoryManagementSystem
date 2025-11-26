@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36717.8
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryManagementApp", "InventoryManagementApp\InventoryManagementApp.csproj", "{4FFFA520-C277-421A-A0CD-B8D1BC326158}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryManagementAppTest", "InventoryManagementAppTest\InventoryManagementAppTest.csproj", "{A1C49DE3-0CB6-4390-BBB2-60A550790071}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		C:\Users\Aurora\OneDrive\Pictures\architecture.png = C:\Users\Aurora\OneDrive\Pictures\architecture.png
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4FFFA520-C277-421A-A0CD-B8D1BC326158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FFFA520-C277-421A-A0CD-B8D1BC326158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FFFA520-C277-421A-A0CD-B8D1BC326158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FFFA520-C277-421A-A0CD-B8D1BC326158}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1C49DE3-0CB6-4390-BBB2-60A550790071}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1C49DE3-0CB6-4390-BBB2-60A550790071}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1C49DE3-0CB6-4390-BBB2-60A550790071}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1C49DE3-0CB6-4390-BBB2-60A550790071}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F28286AC-858C-4615-A1B2-24A23160D51A}
+	EndGlobalSection
+EndGlobal
