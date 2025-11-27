@@ -33,7 +33,7 @@ namespace InventoryManagementApp.ViewModels
             }
             else
             {
-                _inventoryService = inventory.GetService(nameof(SqlInventoryService));
+                _inventoryService = inventory.GetService(nameof(ApiSqlInventoryService));
             }
 
             AddCommand = new RelayCommandAsync(ExecuteAddAsync, () => _canAdd);

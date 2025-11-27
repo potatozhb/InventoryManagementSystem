@@ -35,13 +35,19 @@ namespace InventoryManagementApp
         {
             // Services
             services.AddSingleton<InMemoryInventoryService>();
-            services.AddSingleton<SqlInventoryService>();
             services.AddSingleton<IServiceFactory, ServiceFactory>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<IFeatureManagerService, FeatureManagerService>();
             services.AddTransient<ISeedDataService, SeedDataService>();
 
             services.AddSingleton(typeof(Lazy<>), typeof(LazyResolver<>));
+
+            services.AddHttpClient<ApiSqlInventoryService>((sp, client) =>
+            {
+                var featureManager = sp.GetRequiredService<IFeatureManagerService>();
+                var apiUrl = featureManager.ServiceUrl;
+                client.BaseAddress = new Uri(apiUrl);
+            });
 
             // ViewModels
             services.AddSingleton<MainWindowViewModel>();

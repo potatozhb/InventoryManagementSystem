@@ -18,5 +18,14 @@ namespace InventoryManagementApp.Services
                 return bool.TryParse(val, out bool result) && result;
             }
         }
+
+        public string ServiceUrl
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["ServiceUrl"];
+            }
+
+        }
     }
 }

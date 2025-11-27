@@ -9,6 +9,6 @@ namespace InventoryManagementApp.Services.Interfaces
     public interface IFeatureManagerService
     {
         bool IsUseSqlDb { get; }
-
+        string ServiceUrl { get; }
     }
 }

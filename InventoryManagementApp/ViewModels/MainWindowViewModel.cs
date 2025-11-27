@@ -53,7 +53,7 @@ namespace InventoryManagementApp.ViewModels
             }
             else
             {
-                _inventory = inventory.GetService(nameof(SqlInventoryService));
+                _inventory = inventory.GetService(nameof(ApiSqlInventoryService));
             }
 
 

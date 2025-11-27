@@ -14,7 +14,7 @@ namespace InventoryManagementApp.Services
         private readonly Dictionary<string, Type> _serviceMap = new()
             {
                 { nameof(InMemoryInventoryService), typeof(InMemoryInventoryService) },
-                { nameof(SqlInventoryService), typeof(SqlInventoryService) }
+                { nameof(ApiSqlInventoryService), typeof(ApiSqlInventoryService) }
             };
 
         public ServiceFactory(IServiceProvider serviceProvider)
