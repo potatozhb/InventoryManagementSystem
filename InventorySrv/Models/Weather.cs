@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace InventorySrv.Models
 {
-    public class Inventory
+    public class InventoryItem1
     {
         private static readonly DateTime utcNow = DateTime.UtcNow;
 

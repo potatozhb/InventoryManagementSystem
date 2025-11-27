@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System.Threading.Tasks;
 using InventorySrv.Data;
-using InventorySrv.Models;
+using Shared.Models;
 
 namespace InventorySrv.Repos
 {
@@ -21,7 +21,7 @@ namespace InventorySrv.Repos
             this._logger = logger;
         }
 
-        public void CreateInventory(Inventory Inventory)
+        public void CreateInventory(InventoryItem Inventory)
         {
             if (Inventory == null) throw new ArgumentNullException(nameof(Inventory));
             this._context.Inventorys.Add(Inventory);
@@ -41,29 +41,22 @@ namespace InventorySrv.Repos
             }
         }
 
-        public async Task<IEnumerable<Inventory>> GetAllInventorysAsync()
+        public async Task<IEnumerable<InventoryItem>> GetAllInventorysAsync()
         {
             return await this._context.Inventorys.ToListAsync();
         }
 
-        public async Task<IEnumerable<Inventory>> GetAllInventorysByUserAsync(string userId)
-        {
-            return await this._context.Inventorys.Where(w => w.UserId == userId).ToListAsync();
-        }
-
-        public async Task<IEnumerable<Inventory>> GetAllInventorysByUserAsync(string userId, int start, int end)
+        public async Task<IEnumerable<InventoryItem>> GetAllInventorysByUserAsync(int start, int end)
         {
             return await this._context.Inventorys
-                .Where(w => w.UserId == userId)
-                .OrderBy(w => w.UpdateTime)
                 .Skip(start)
                 .Take(end - start)
                 .ToListAsync();
         }
 
-        public async Task<Inventory?> GetInventoryAsync(Guid id)
+        public async Task<InventoryItem?> GetInventoryAsync(Guid id)
         {
-            if (this._cache.TryGetValue(id, out var data) && data is Inventory Inventory)
+            if (this._cache.TryGetValue(id, out var data) && data is InventoryItem Inventory)
             {
                 this._logger.LogInformation($"--> Get a data from cache");
                 return Inventory;
@@ -81,7 +74,7 @@ namespace InventorySrv.Repos
             return await this._context.SaveChangesAsync() >= 0;
         }
 
-        public void UpdateInventory(Inventory Inventory)
+        public void UpdateInventory(InventoryItem Inventory)
         {
             if (Inventory == null) throw new ArgumentNullException(nameof(Inventory));
 
@@ -89,9 +82,10 @@ namespace InventorySrv.Repos
             if (curInventory == null)
                 throw new InvalidOperationException("Inventory not found");
 
-            curInventory.Rain = Inventory.Rain;
-            curInventory.UserId = Inventory.UserId;
-            curInventory.UpdateTime = Inventory.UpdateTime;
+            curInventory.Name = Inventory.Name;
+            curInventory.Category = Inventory.Category;
+            curInventory.Quantity = Inventory.Quantity;
+            curInventory.Price = Inventory.Price;
         }
     }
 }

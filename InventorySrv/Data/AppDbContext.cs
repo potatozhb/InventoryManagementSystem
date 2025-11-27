@@ -1,6 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
-using InventorySrv.Models;
+using Shared.Models;
 
 namespace InventorySrv.Data
 {
@@ -8,7 +8,7 @@ namespace InventorySrv.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<Inventory> Inventorys { get; set; }
+        public DbSet<InventoryItem> Inventorys { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

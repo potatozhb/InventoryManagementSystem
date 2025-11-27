@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using InventorySrv.Dtos;
 using InventorySrv.Models;
-using InventorySrv.Repos;
+using Shared.Models;
 using InventorySrv.Services;
 
 namespace InventorySrv.Controllers
@@ -28,7 +28,7 @@ namespace InventorySrv.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Inventory>>> GetInventorys()
+        public async Task<ActionResult<IEnumerable<InventoryItem>>> GetInventorys()
         {
             var Inventorys = await this._InventoryService.GetInventorysAsync();
             return Ok(Inventorys);
@@ -43,10 +43,10 @@ namespace InventorySrv.Controllers
         {
             try
             {
-                var InventoryDtos = await _InventoryService.GetInventorysAsync(userId, start, end);
+                var InventoryDtos = await _InventoryService.GetInventorysAsync(start, end);
 
                 if (!InventoryDtos.Any())
-                    return NotFound($"User {userId} not found");
+                    return NotFound($"Not found");
 
                 return Ok(new InventoryReadResponse { Data = InventoryDtos });
             }
@@ -76,7 +76,7 @@ namespace InventorySrv.Controllers
              */
             try
             {
-                var createdInventory = await _InventoryService.CreateInventoryForUserAsync(userId, InventoryCreateDto);
+                var createdInventory = await _InventoryService.CreateInventoryForUserAsync(InventoryCreateDto);
                 return Created("", createdInventory);
             }
             catch (ArgumentException ex)

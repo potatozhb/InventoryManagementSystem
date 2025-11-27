@@ -1,6 +1,7 @@
 using AutoMapper;
 using InventorySrv.Dtos;
 using InventorySrv.Models;
+using Shared.Models;
 using InventorySrv.Repos;
 
 namespace InventorySrv.Services
@@ -18,7 +19,7 @@ namespace InventorySrv.Services
             _InventoryRepo = InventoryRepo;
         }
 
-        public async Task<IEnumerable<Inventory>> GetInventorysAsync()
+        public async Task<IEnumerable<InventoryItem>> GetInventorysAsync()
         {
             _logger.LogInformation("--> Getting Inventorys....");
 
@@ -27,15 +28,9 @@ namespace InventorySrv.Services
             return Inventorys;
         }
 
-        public async Task<IEnumerable<InventoryReadDto>> GetInventorysAsync(string userId, int? start, int? end)
+        public async Task<IEnumerable<InventoryReadDto>> GetInventorysAsync(int? start, int? end)
         {
-            if (string.IsNullOrWhiteSpace(userId) || userId.Length > 50)
-            {
-                _logger.LogError("--> userId can't be empty");
-                throw new ArgumentException("Invalid userId");
-            }
-
-            IEnumerable<Inventory> Inventorys;
+            IEnumerable<InventoryItem> Inventorys;
 
             if (start.HasValue && end.HasValue)
             {
@@ -45,36 +40,25 @@ namespace InventorySrv.Services
                     throw new ArgumentException("Invalid paging parameters");
                 }
 
-                _logger.LogInformation($"--> Getting Inventorys for user {userId} from index {start.Value} to {end.Value}....");
-                Inventorys = await _InventoryRepo.GetAllInventorysByUserAsync(userId, start.Value, end.Value);
+                Inventorys = await _InventoryRepo.GetAllInventorysByUserAsync(start.Value, end.Value);
             }
             else
             {
-                _logger.LogInformation($"--> Getting Inventorys for user {userId}....");
-                Inventorys = await _InventoryRepo.GetAllInventorysByUserAsync(userId);
+                Inventorys = await _InventoryRepo.GetAllInventorysAsync();
             }
 
             if (!Inventorys.Any())
             {
-                _logger.LogWarning($"--> User {userId} not found or has no Inventory data");
+                _logger.LogWarning($"--> Not found or has no Inventory data");
                 return Enumerable.Empty<InventoryReadDto>();
             }
 
             return _mapper.Map<IEnumerable<InventoryReadDto>>(Inventorys);
         }
 
-        public async Task<InventoryReadDto> CreateInventoryForUserAsync(string userId, InventoryCreateDto InventoryCreateDto)
+        public async Task<InventoryReadDto> CreateInventoryForUserAsync(InventoryCreateDto InventoryCreateDto)
         {
-            if (string.IsNullOrWhiteSpace(userId) || userId.Length > 50)
-            {
-                _logger.LogError("--> userId can't be empty");
-                throw new ArgumentException("Invalid userId");
-            }
-
-            _logger.LogInformation($"--> Creating Inventorys for user {userId}....");
-
-            var Inventory = _mapper.Map<Inventory>(InventoryCreateDto);
-            Inventory.UserId = userId;
+            var Inventory = _mapper.Map<InventoryItem>(InventoryCreateDto);
 
             _InventoryRepo.CreateInventory(Inventory);
             await _InventoryRepo.SaveChangesAsync();

@@ -1,18 +1,17 @@
 
-using InventorySrv.Models;
+using Shared.Models;
 
 namespace InventorySrv.Repos
 {
     public interface IInventoryRepo
     {
-        void CreateInventory(Inventory Inventory);
-        void UpdateInventory(Inventory Inventory);
+        void CreateInventory(InventoryItem Inventory);
+        void UpdateInventory(InventoryItem Inventory);
         void DeleteInventory(Guid id);
 
-        Task<IEnumerable<Inventory>> GetAllInventorysAsync();
-        Task<IEnumerable<Inventory>> GetAllInventorysByUserAsync(string userId);
-        Task<IEnumerable<Inventory>> GetAllInventorysByUserAsync(string userId, int start, int end);
-        Task<Inventory?> GetInventoryAsync(Guid id);
+        Task<IEnumerable<InventoryItem>> GetAllInventorysAsync();
+        Task<IEnumerable<InventoryItem>> GetAllInventorysByUserAsync(int start, int end);
+        Task<InventoryItem?> GetInventoryAsync(Guid id);
 
         Task<bool> SaveChangesAsync();
     }

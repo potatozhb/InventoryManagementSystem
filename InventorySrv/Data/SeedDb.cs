@@ -1,5 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using InventorySrv.Models;
+using Microsoft.EntityFrameworkCore;
+using Shared.Models;
 
 namespace InventorySrv.Data
 {
@@ -33,9 +34,11 @@ namespace InventorySrv.Data
                 Console.WriteLine("--> Seeding data...");
                 DateTime utc = DateTime.UtcNow.AddHours(-1);
                 context.Inventorys.AddRange(
-                    new Inventory { UserId = "Bob", Rain = false, CreateTime = utc, UpdateTime = utc },
-                    new Inventory { UserId = "Bob", Rain = true },
-                    new Inventory { UserId = "Alice", Rain = true }
+                    new InventoryItem { Name = "Laptop", Category = "Electronics", Quantity = 10 },
+                    new InventoryItem { Name = "Smartphone", Category = "Electronics", Quantity = 25 },
+                    new InventoryItem { Name = "Jeans", Category = "Clothing", Quantity = 50 },
+                    new InventoryItem { Name = "Apple", Category = "Food", Quantity = 100 },
+                    new InventoryItem { Name = "Banana", Category = "Food", Quantity = 150 }
                 );
                 context.SaveChanges();
             }
