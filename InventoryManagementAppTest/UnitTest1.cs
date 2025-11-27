@@ -1,8 +1,9 @@
 using System.ComponentModel;
-using InventoryManagementApp.Models;
+using Shared.Models;
 using InventoryManagementApp.Services.Interfaces;
 using InventoryManagementApp.ViewModels;
 using Moq;
+using InventoryManagementApp.Models;
 
 namespace InventoryManagementAppTest
 {

@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InventoryManagementApp\InventoryManagementApp.csproj" />
+    <ProjectReference Include="..\Shared.Models\Shared.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>
