@@ -44,8 +44,7 @@ namespace InventoryManagementApp.ViewModels
             ISeedDataService seed,
             SearchBarViewModel searchBarVM,
             DataItemsViewModel dataItemsVM, 
-            EditBarViewModel editBarVM,
-            INavigationService nav)
+            EditBarViewModel editBarVM)
         {
             if(!feature.IsUseSqlDb)
             {
