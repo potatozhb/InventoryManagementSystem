@@ -1,12 +1,13 @@
-﻿using InventoryManagementApp.Models;
+﻿using InventoryManagementApp.Infras;
+using InventoryManagementApp.Models;
 using InventoryManagementApp.Services.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net.Http.Json;
+using Shared.Models;
 
 namespace InventoryManagementApp.Services
 {
@@ -17,7 +18,7 @@ namespace InventoryManagementApp.Services
 
         public ApiSqlInventoryService(HttpClient http)
         {
-            _http = http;
+            _http = http ?? throw new ArgumentNullException(nameof(http));
         }
 
         public Task<InventoryItem> AddItemAsync(InventoryItem item)
@@ -26,24 +27,45 @@ namespace InventoryManagementApp.Services
             return Task.FromResult(item);
         }
 
-        public Task DeleteItemAsync(Guid id)
+        public async Task DeleteItemAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var response = await _http.DeleteAsync(string.Format(ApiEndpoints.DeleteItem, id));
+            response.EnsureSuccessStatusCode();
         }
 
-        public Task<InventoryItem> GetItemAsync(Guid id)
+        public async Task<InventoryItem> GetItemAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var response = await _http.GetAsync(string.Format(ApiEndpoints.GetItemById, id));
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<InventoryItem>() ?? throw new Exception("Item not found");
         }
 
-        public Task<IEnumerable<InventoryItem>> GetItemsAsync(int? startIndex = null, int? endIndex = null, Filters? filter = null)
+        public async Task<IEnumerable<InventoryItem>> GetItemsAsync(int? startIndex = null, int? endIndex = null, Filters? filter = null)
         {
-            throw new NotImplementedException();
+            var queryParams = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(filter?.SearchName))
+                queryParams.Add($"name={Uri.EscapeDataString(filter.SearchName)}");
+
+            if (!string.IsNullOrWhiteSpace(filter?.SearchCategory))
+                queryParams.Add($"category={Uri.EscapeDataString(filter.SearchCategory)}");
+
+            string queryString = queryParams.Count > 0 ? "?" + string.Join("&", queryParams) : "";
+
+            var response = await _http.GetAsync(string.Format(ApiEndpoints.GetItems, queryString));
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadFromJsonAsync<IEnumerable<InventoryItem>>() ?? Array.Empty<InventoryItem>();
         }
 
-        public Task<InventoryItem> UpdateItemAsync(InventoryItem item)
+        public async Task<InventoryItem> UpdateItemAsync(InventoryItem item)
         {
-            throw new NotImplementedException();
+            if (item.Id == Guid.Empty)
+                throw new ArgumentException("Item ID must be set for update.");
+
+            var response = await _http.PutAsJsonAsync(ApiEndpoints.UpdateItem +  $"{item.Id}", item);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<InventoryItem>() ?? item;
         }
     }
 }

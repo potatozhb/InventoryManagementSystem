@@ -8,7 +8,7 @@ namespace InventoryManagementApp.Infras
 {
     public static class ApiEndpoints
     {
-        public const string Base = "v1/items";
+        public const string Base = "api/v1/inventory";
 
         public const string AddItem = Base;                  // POST v1/items
         public const string UpdateItem = Base + "/patch/{0}"; // PUT v1/patch/items/{id}

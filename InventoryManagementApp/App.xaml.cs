@@ -1,5 +1,5 @@
 ﻿using InventoryManagementApp.Infras;
-using InventoryManagementApp.Models;
+using Shared.Models;
 using InventoryManagementApp.Services;
 using InventoryManagementApp.Services.Interfaces;
 using InventoryManagementApp.ViewModels;

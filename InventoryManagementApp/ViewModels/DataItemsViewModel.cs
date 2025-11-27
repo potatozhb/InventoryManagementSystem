@@ -1,7 +1,5 @@
 ﻿using InventoryManagementApp.EventAggregator;
-using InventoryManagementApp.Infras;
-using InventoryManagementApp.Models;
-using System.Collections.ObjectModel;
+using Shared.Models;
 using System.ComponentModel;
 
 namespace InventoryManagementApp.ViewModels

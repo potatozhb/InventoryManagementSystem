@@ -1,10 +1,6 @@
 ﻿using InventoryManagementApp.Models;
 using InventoryManagementApp.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Shared.Models;
 
 namespace InventoryManagementApp.Services
 {

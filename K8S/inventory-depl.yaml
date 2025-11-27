@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventoryservice
+  template:
+    metadata:
+      labels:
+        app: inventoryservice
+    spec:
+      containers:
+        - name: inventoryservice
+          image: potatozhb1980/inventoryservice:latest
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-clusterip-srv
+spec:
+  selector:
+    app: inventoryservice
+  ports:
+    - name: inventoryservice
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+
