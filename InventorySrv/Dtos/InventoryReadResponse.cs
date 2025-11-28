@@ -1,7 +1,9 @@
-﻿namespace InventorySrv.Dtos
+﻿using Shared.Models;
+
+namespace InventorySrv.Dtos
 {
     public class InventoryReadResponse
     {
-        public IEnumerable<InventoryReadDto> Data { get; set; }
+        public PagedResultDto<InventoryItem> Data { get; set; }
     }
 }

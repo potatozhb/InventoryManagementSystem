@@ -1,4 +1,4 @@
-﻿using InventoryManagementApp.Models;
+﻿
 using InventoryManagementApp.Services.Interfaces;
 using Shared.Models;
 

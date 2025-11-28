@@ -6,8 +6,11 @@ namespace InventorySrv.Services
 {
     public interface IInventoryService
     {
-        Task<IEnumerable<InventoryItem>> GetInventorysAsync();
-        Task<IEnumerable<InventoryReadDto>> GetInventorysAsync(int? start, int? end);
-        Task<InventoryReadDto> CreateInventoryForUserAsync(InventoryCreateDto InventoryCreateDto);
+        Task<InventoryItem> GetInventoryAsync(Guid id);
+        Task<PagedResultDto<InventoryItem>> GetInventorysAsync(
+            InventoryFilterDto? filter = null, int? start = null, int? end = null);
+        Task<InventoryItem> CreateInventoryForUserAsync(InventoryItem inventory);
+        Task<InventoryItem> UpdateInventoryForUserAsync(InventoryItem inventory);
+        Task<InventoryItem> RemoveInventoryAsync(Guid id);
     }
 }

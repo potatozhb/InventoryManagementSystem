@@ -19,52 +19,57 @@ namespace InventorySrv.Services
             _InventoryRepo = InventoryRepo;
         }
 
-        public async Task<IEnumerable<InventoryItem>> GetInventorysAsync()
-        {
-            _logger.LogInformation("--> Getting Inventorys....");
 
-            var Inventorys = await this._InventoryRepo.GetAllInventorysAsync();
-
-            return Inventorys;
-        }
-
-        public async Task<IEnumerable<InventoryReadDto>> GetInventorysAsync(int? start, int? end)
+        public async Task<PagedResultDto<InventoryItem>> GetInventorysAsync(InventoryFilterDto? filter, int? start, int? end)
         {
             IEnumerable<InventoryItem> Inventorys;
 
-            if (start.HasValue && end.HasValue)
-            {
-                if (start < 0 || end <= start)
-                {
-                    _logger.LogError("--> Invalid paging parameters");
-                    throw new ArgumentException("Invalid paging parameters");
-                }
+            int s = start != null ? start.Value : 0;
+            int e = end != null ? end.Value : s + 20;
+            Inventorys = await _InventoryRepo.GetAllInventorysByUserAsync(filter, s, e);
 
-                Inventorys = await _InventoryRepo.GetAllInventorysByUserAsync(start.Value, end.Value);
-            }
-            else
-            {
-                Inventorys = await _InventoryRepo.GetAllInventorysAsync();
-            }
+            var res = new PagedResultDto<InventoryItem>();
 
             if (!Inventorys.Any())
             {
                 _logger.LogWarning($"--> Not found or has no Inventory data");
-                return Enumerable.Empty<InventoryReadDto>();
+                res.Items = Enumerable.Empty<InventoryItem>();
             }
+            res.TotalPages = Inventorys.ToList().Count / (e - s) +1;
+            res.CurrentPage = s / (e - s) + 1;
 
-            return _mapper.Map<IEnumerable<InventoryReadDto>>(Inventorys);
+            res.Items = Inventorys;
+            return res;
         }
 
-        public async Task<InventoryReadDto> CreateInventoryForUserAsync(InventoryCreateDto InventoryCreateDto)
+        public async Task<InventoryItem> CreateInventoryForUserAsync(InventoryItem inventory)
         {
-            var Inventory = _mapper.Map<InventoryItem>(InventoryCreateDto);
+            var Inventory = _mapper.Map<InventoryItem>(inventory);
 
             _InventoryRepo.CreateInventory(Inventory);
             await _InventoryRepo.SaveChangesAsync();
 
-            return _mapper.Map<InventoryReadDto>(Inventory);
+            return Inventory;
         }
 
+        public async Task<InventoryItem> GetInventoryAsync(Guid id)
+        {
+            var inventory = await _InventoryRepo.GetInventoryAsync(id);
+            return inventory;
+        }
+
+        public async Task<InventoryItem> UpdateInventoryForUserAsync(InventoryItem inventory)
+        {
+            _InventoryRepo.UpdateInventory(inventory);
+            await _InventoryRepo.SaveChangesAsync();
+            return inventory;
+        }
+
+        public async Task<InventoryItem> RemoveInventoryAsync(Guid id)
+        {
+            _InventoryRepo.DeleteInventory(id);
+            await _InventoryRepo.SaveChangesAsync();
+            return null;
+        }
     }
 }

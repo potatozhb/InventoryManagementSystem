@@ -6,9 +6,13 @@ namespace InventorySrv.Dtos
     public class InventoryReadDto
     {
         [Required]
-        public DateTime Timestamp { get; set; }
+        public string Name { get; set; }
 
         [Required]
-        public bool Rain { get; set; }
+        public string Category { get; set; }
+
+        [Required]
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
     }
 }

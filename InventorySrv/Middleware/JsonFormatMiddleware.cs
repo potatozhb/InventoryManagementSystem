@@ -8,7 +8,7 @@ namespace InventorySrv.Middleware
 {
     public class JsonFormatMiddleware
     {
-        private const int _limit = 10; // max requests per 10 seconds fixed window
+        private const int _limit = 1000; // max requests per 10 seconds fixed window
         private static readonly MemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
         private readonly RequestDelegate _next;
         private readonly ILogger<JsonFormatMiddleware> _logger;

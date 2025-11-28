@@ -4,6 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 using System.Threading.Tasks;
 using InventorySrv.Data;
 using Shared.Models;
+using InventorySrv.Dtos;
 
 namespace InventorySrv.Repos
 {
@@ -54,6 +55,36 @@ namespace InventorySrv.Repos
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<InventoryItem>> GetAllInventorysByUserAsync(InventoryFilterDto filter, int start, int end)
+        {
+            if (start < 0) start = 0;
+            if (end < start) end = start;
+
+            int count = end - start;
+
+            IQueryable<InventoryItem> query = _context.Inventorys;
+
+            // Apply filters first
+            if (filter != null)
+            {
+                if (!string.IsNullOrWhiteSpace(filter.Name))
+                {
+                    query = query.Where(i => i.Name.Contains(filter.Name, StringComparison.OrdinalIgnoreCase));
+                }
+
+                if (!string.IsNullOrWhiteSpace(filter.Category) && filter.Category != "All")
+                {
+                    query = query.Where(i =>
+                                        i.Category != null &&
+                                        i.Category.ToLower() == filter.Category.ToLower());
+                }
+            }
+            // Then apply paging
+            query = query.OrderBy(o => o.CreateTime).Skip(start).Take(count);
+
+            return await query.ToListAsync();
+        }
+
         public async Task<InventoryItem?> GetInventoryAsync(Guid id)
         {
             if (this._cache.TryGetValue(id, out var data) && data is InventoryItem Inventory)
@@ -78,6 +109,7 @@ namespace InventorySrv.Repos
         {
             if (Inventory == null) throw new ArgumentNullException(nameof(Inventory));
 
+            this._cache.Remove(Inventory.Id);
             var curInventory = this.GetInventoryAsync(Inventory.Id).Result;
             if (curInventory == null)
                 throw new InvalidOperationException("Inventory not found");

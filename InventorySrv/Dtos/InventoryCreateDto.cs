@@ -6,6 +6,13 @@ namespace InventorySrv.Dtos
     public class InventoryCreateDto
     {
         [Required]
-        public bool? Rain { get; set; } //need nullable value to check the field exist
+        public string Name { get; set; }
+
+        [Required]
+        public string Category { get; set; }
+
+        [Required]
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
     }
 }

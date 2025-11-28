@@ -10,7 +10,7 @@ namespace InventoryManagementApp.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {
-        private const int PageSize = 4;  // items per page
+        private const int PageSize = 4;  // items per page, can compute base on screen size, now just give it fixed number
 
         private readonly IInventoryService _inventory;
 
@@ -21,21 +21,10 @@ namespace InventoryManagementApp.ViewModels
         public DataItemsViewModel DataItemsVM { get; }
         public EditBarViewModel EditBarVM { get; }
 
-        private int _currentPage = 1;
+        
+        public int CurrentPage { get; set; } = 1;
 
-        public int CurrentPage
-        {
-            get => _currentPage;
-            set 
-            { 
-                _currentPage = value; 
-                OnPropertyChanged(nameof(CurrentPage)); 
-               // RefreshPagedItems(); 
-            }
-        }
-
-        public int TotalPages =>
-            (int)Math.Ceiling((double)FilteredItems.Cast<object>().Count() / PageSize);
+        public int TotalPages { get; set; } = 1;
 
 
         public MainWindowViewModel(
@@ -74,11 +63,20 @@ namespace InventoryManagementApp.ViewModels
             if (e.PropertyName == nameof(SearchBarVM.SearchName)
                 || e.PropertyName == nameof(SearchBarVM.SearchCategory))
             {
-                FilteredItems.Refresh();
+                //FilteredItems.Refresh();
+                //filter from backend
+                var filter = new Filters() { SearchName = SearchBarVM.SearchName
+                    , SearchCategory = SearchBarVM.SearchCategory};
+
+                Refresh(filter, 0, PageSize);
             }
         }
 
-
+        /// <summary>
+        /// Filter on front end
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         private bool FilterItems(object obj)
         {
             if (obj is not InventoryItem item) return false;
@@ -94,9 +92,12 @@ namespace InventoryManagementApp.ViewModels
             return nameMatch && categoryMatch;
         }
 
-        public async Task Refresh()
+        public async Task Refresh(Filters? filter = null, int? start = null, int? end = null)
         {
-            var list = await _inventory.GetItemsAsync();
+            var res = await _inventory.GetItemsAsync(filter, start, end);
+            CurrentPage = res.CurrentPage;
+            TotalPages = res.TotalPages;
+            var list = res.Items;
             Items.Clear();
             foreach (var i in list) Items.Add(i);
 

@@ -16,6 +16,9 @@ namespace Shared.Models
 
         [Required]
         public int Quantity { get; set; }
+
+        public DateTime CreateTime { get; set; } = DateTime.Now;
+
         public decimal Price { get; set; }
     }
 }

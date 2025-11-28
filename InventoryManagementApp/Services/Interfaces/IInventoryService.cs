@@ -2,20 +2,15 @@
 
 namespace InventoryManagementApp.Services.Interfaces
 {
-    using InventoryManagementApp.Models;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-
-
     public interface IInventoryService
     {
         Task<InventoryItem> AddItemAsync(InventoryItem item);
         Task<InventoryItem> UpdateItemAsync(InventoryItem item);
         Task DeleteItemAsync(Guid id);
         Task<InventoryItem> GetItemAsync(Guid id);
-        Task<IEnumerable<InventoryItem>> GetItemsAsync(
+        Task<PagedResultDto<InventoryItem>> GetItemsAsync(
+            Filters? filter = null,
             int? startIndex = null,
-            int? endIndex = null,
-            Filters? filter = null);
+            int? endIndex = null);
     }
 }

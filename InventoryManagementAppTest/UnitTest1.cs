@@ -3,7 +3,6 @@ using Shared.Models;
 using InventoryManagementApp.Services.Interfaces;
 using InventoryManagementApp.ViewModels;
 using Moq;
-using InventoryManagementApp.Models;
 
 namespace InventoryManagementAppTest
 {
@@ -32,14 +31,17 @@ namespace InventoryManagementAppTest
             _mockServiceFactory.Setup(f => f.GetService(It.IsAny<string>())).Returns(_mockInventoryService.Object);
             _mockSeedDataService.Setup(s => s.Seed());
 
-            _mockInventoryService.Setup(s => s.GetItemsAsync(It.IsAny<int?>(), It.IsAny<int?>(),
-                It.IsAny<Filters?>()))
-                .ReturnsAsync(new List<InventoryItem>
-            {
-                new InventoryItem { Name = "Item1", Category = "Electronics", Quantity = 2 },
-                new InventoryItem { Name = "Item2", Category = "Food", Quantity = 5 },
-                new InventoryItem { Name = "Item3", Category = "Clothing", Quantity = 10 }
-            }.AsEnumerable());
+            _mockInventoryService.Setup(s => s.GetItemsAsync(It.IsAny<Filters?>(),
+                It.IsAny<int?>(), It.IsAny<int?>()))
+                .ReturnsAsync(new PagedResultDto<InventoryItem>(){
+                    CurrentPage = 1,
+                    TotalPages = 1,
+                    Items = new List<InventoryItem>
+                    {
+                        new InventoryItem { Name = "Item1", Category = "Electronics", Quantity = 2 },
+                        new InventoryItem { Name = "Item2", Category = "Food", Quantity = 5 },
+                        new InventoryItem { Name = "Item3", Category = "Clothing", Quantity = 10 }
+                    }.AsEnumerable() });
         }
 
         private MainWindowViewModel CreateVm()

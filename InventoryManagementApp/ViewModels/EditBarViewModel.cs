@@ -197,7 +197,7 @@ namespace InventoryManagementApp.ViewModels
         {
             return new InventoryItem
             {
-                Id = id ?? new Guid(),
+                Id = id ?? Guid.NewGuid(),
                 Name = EditName,
                 Category = EditCategory,
                 Quantity = int.TryParse(EditQuantity, out int q) ? q : 0,

@@ -1,5 +1,4 @@
 ﻿using InventoryManagementApp.Infras;
-using InventoryManagementApp.Models;
 using InventoryManagementApp.Services.Interfaces;
 using System;
 using System.Collections.Concurrent;
@@ -21,10 +20,11 @@ namespace InventoryManagementApp.Services
             _http = http ?? throw new ArgumentNullException(nameof(http));
         }
 
-        public Task<InventoryItem> AddItemAsync(InventoryItem item)
+        public async Task<InventoryItem> AddItemAsync(InventoryItem item)
         {
-            _store[item.Id] = item;
-            return Task.FromResult(item);
+            var response = await _http.PostAsJsonAsync(ApiEndpoints.AddItem, item);
+            response.EnsureSuccessStatusCode();
+            return item;
         }
 
         public async Task DeleteItemAsync(Guid id)
@@ -37,10 +37,14 @@ namespace InventoryManagementApp.Services
         {
             var response = await _http.GetAsync(string.Format(ApiEndpoints.GetItemById, id));
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<InventoryItem>() ?? throw new Exception("Item not found");
+            var res = await response.Content.ReadFromJsonAsync<InventoryItem>();
+            return res ?? throw new Exception("Item not found");
         }
 
-        public async Task<IEnumerable<InventoryItem>> GetItemsAsync(int? startIndex = null, int? endIndex = null, Filters? filter = null)
+        public async Task<PagedResultDto<InventoryItem>> GetItemsAsync(
+            Filters? filter = null,
+            int? startIndex = null,
+            int? endIndex = null)
         {
             var queryParams = new List<string>();
 
@@ -55,7 +59,7 @@ namespace InventoryManagementApp.Services
             var response = await _http.GetAsync(string.Format(ApiEndpoints.GetItems, queryString));
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<IEnumerable<InventoryItem>>() ?? Array.Empty<InventoryItem>();
+            return await response.Content.ReadFromJsonAsync<PagedResultDto<InventoryItem>>() ?? new PagedResultDto<InventoryItem>();
         }
 
         public async Task<InventoryItem> UpdateItemAsync(InventoryItem item)
@@ -63,7 +67,7 @@ namespace InventoryManagementApp.Services
             if (item.Id == Guid.Empty)
                 throw new ArgumentException("Item ID must be set for update.");
 
-            var response = await _http.PutAsJsonAsync(ApiEndpoints.UpdateItem +  $"{item.Id}", item);
+            var response = await _http.PutAsJsonAsync(string.Format(ApiEndpoints.GetItems, item.Id), item);
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<InventoryItem>() ?? item;
         }

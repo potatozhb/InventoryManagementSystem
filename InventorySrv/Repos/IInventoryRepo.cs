@@ -1,4 +1,5 @@
 
+using InventorySrv.Dtos;
 using Shared.Models;
 
 namespace InventorySrv.Repos
@@ -11,6 +12,7 @@ namespace InventorySrv.Repos
 
         Task<IEnumerable<InventoryItem>> GetAllInventorysAsync();
         Task<IEnumerable<InventoryItem>> GetAllInventorysByUserAsync(int start, int end);
+        Task<IEnumerable<InventoryItem>> GetAllInventorysByUserAsync(InventoryFilterDto filter, int start, int end);
         Task<InventoryItem?> GetInventoryAsync(Guid id);
 
         Task<bool> SaveChangesAsync();

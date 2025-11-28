@@ -1,7 +1,6 @@
 
 using AutoMapper;
 using InventorySrv.Dtos;
-using InventorySrv.Models;
 using Shared.Models;
 
 namespace InventorySrv.Profiles

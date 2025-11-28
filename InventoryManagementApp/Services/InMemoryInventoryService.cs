@@ -1,4 +1,4 @@
-﻿using InventoryManagementApp.Models;
+﻿
 using InventoryManagementApp.Services.Interfaces;
 using System;
 using System.Collections.Concurrent;
@@ -31,23 +31,30 @@ namespace InventoryManagementApp.Services
             return Task.FromResult(item);
         }
 
-        public Task<IEnumerable<InventoryItem>> GetItemsAsync(
+        public Task<PagedResultDto<InventoryItem>> GetItemsAsync(
+            Filters? filter = null,
             int? startIndex = null, 
-            int? endIndex = null, 
-            Filters? filter = null)
+            int? endIndex = null)
         {
             var q = _store.Values.AsEnumerable();
             if (filter != null)
             {
                 if (!string.IsNullOrEmpty(filter.SearchName))
                     q = q.Where(i => i.Name.Contains(filter.SearchName.Trim(), StringComparison.OrdinalIgnoreCase));
-                if (!string.IsNullOrEmpty(filter.SearchCategory))
-                    q = q.Where(i => i.Name.Contains(filter.SearchCategory.Trim(), StringComparison.OrdinalIgnoreCase));
+                if (!string.IsNullOrEmpty(filter.SearchCategory) && filter.SearchCategory != "All")
+                    q = q.Where(i => i.Category.Contains(filter.SearchCategory.Trim(), StringComparison.OrdinalIgnoreCase));
             }
+
+            int s = startIndex != null ? startIndex.Value : 0;
+            int e = endIndex != null ? endIndex.Value : s + 20;
+
+            var res = new PagedResultDto<InventoryItem>();
+            res.TotalPages = q.ToList().Count / (e-s) + 1;
+            res.CurrentPage = s/(e-s) +1;
+            q = q.OrderBy(o => o.CreateTime).Skip(s).Take(e - s);
+            res.Items = q.ToList();
             
-            if (startIndex != null && endIndex != null)
-                q = q.Skip(startIndex.Value).Take(endIndex.Value - startIndex.Value);
-            return Task.FromResult(q);
+            return Task.FromResult(res);
         }
 
 
