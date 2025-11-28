@@ -1,6 +1,10 @@
-<img width="948" height="606" alt="image" src="https://github.com/user-attachments/assets/75caf656-48b2-4715-86c8-1ae058cd11a8" />
+High level architecture 
+
+<img width="954" height="602" alt="image" src="https://github.com/user-attachments/assets/2be945be-1548-4cb2-937b-6ef6e4246750" />
+
 
 UI:
+
 <img width="791" height="544" alt="image" src="https://github.com/user-attachments/assets/505f0ff8-e425-4f5a-8c6e-ba08c33ff14b" />
 
 Include:
