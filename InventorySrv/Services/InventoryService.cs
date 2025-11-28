@@ -36,7 +36,7 @@ namespace InventorySrv.Services
                 _logger.LogWarning($"--> Not found or has no Inventory data");
                 res.Items = Enumerable.Empty<InventoryItem>();
             }
-            res.TotalPages = total / (e - s) +1;
+            res.TotalPages = total / (e - s) + (total % (e-s) == 0 ? 0:1);
             res.CurrentPage = s / (e - s) + 1;
 
             res.Items = Inventorys;
