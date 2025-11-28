@@ -27,6 +27,7 @@ namespace InventorySrv.Services
             int s = start != null ? start.Value : 0;
             int e = end != null ? end.Value : s + 20;
             Inventorys = await _InventoryRepo.GetAllInventorysByUserAsync(filter, s, e);
+            int total = await _InventoryRepo.GetAllInventorysNumberAsync(filter);
 
             var res = new PagedResultDto<InventoryItem>();
 
@@ -35,7 +36,7 @@ namespace InventorySrv.Services
                 _logger.LogWarning($"--> Not found or has no Inventory data");
                 res.Items = Enumerable.Empty<InventoryItem>();
             }
-            res.TotalPages = Inventorys.ToList().Count / (e - s) +1;
+            res.TotalPages = total / (e - s) +1;
             res.CurrentPage = s / (e - s) + 1;
 
             res.Items = Inventorys;

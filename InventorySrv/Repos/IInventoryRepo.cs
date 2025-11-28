@@ -13,6 +13,7 @@ namespace InventorySrv.Repos
         Task<IEnumerable<InventoryItem>> GetAllInventorysAsync();
         Task<IEnumerable<InventoryItem>> GetAllInventorysByUserAsync(int start, int end);
         Task<IEnumerable<InventoryItem>> GetAllInventorysByUserAsync(InventoryFilterDto filter, int start, int end);
+        Task<int> GetAllInventorysNumberAsync(InventoryFilterDto filter);
         Task<InventoryItem?> GetInventoryAsync(Guid id);
 
         Task<bool> SaveChangesAsync();

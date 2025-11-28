@@ -1,9 +1,11 @@
-﻿using InventoryManagementApp.Infras;
-using Shared.Models;
+﻿using InventoryManagementApp.EventAggregator;
+using InventoryManagementApp.Infras;
 using InventoryManagementApp.Services;
 using InventoryManagementApp.Services.Interfaces;
+using Shared.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace InventoryManagementApp.ViewModels
@@ -53,9 +55,39 @@ namespace InventoryManagementApp.ViewModels
             editBarVM.SetCallback(HandleInventoryOperation);
             searchBarVM.PropertyChanged += OnSearchCriteriaChanged;
 
-            // load
-            _ = Refresh();
+            Messenger.Instance.Subscribe<PageChangedMessage>(msg => OnPageChanged(msg.NewPage));
+            Messenger.Instance.Subscribe<RequestPageInfoMessage>(_ => SendPageInfo());
 
+            // load
+            _ = Refresh(null, 0, PageSize);
+        }
+
+        private async void OnPageChanged(int newPage)
+        {
+            CurrentPage = newPage;
+            await LoadPageAsync();
+            SendPageInfo();
+        }
+
+        private void SendPageInfo()
+        {
+            Messenger.Instance.Publish(new ProvidePageInfoMessage
+            {
+                CurrentPage = CurrentPage,
+                TotalPage = TotalPages
+            });
+        }
+
+        private async Task LoadPageAsync()
+        {
+            int start = (CurrentPage-1) *PageSize;
+            int end = CurrentPage * PageSize;
+            var filter = new Filters()
+            {
+                SearchName = SearchBarVM.SearchName,
+                SearchCategory = SearchBarVM.SearchCategory
+            };
+            Refresh(filter, start, end);
         }
 
         private void OnSearchCriteriaChanged(object? sender, PropertyChangedEventArgs e)
@@ -68,7 +100,7 @@ namespace InventoryManagementApp.ViewModels
                 var filter = new Filters() { SearchName = SearchBarVM.SearchName
                     , SearchCategory = SearchBarVM.SearchCategory};
 
-                Refresh(filter, 0, PageSize);
+                Refresh(filter, 0, PageSize); 
             }
         }
 
@@ -104,6 +136,7 @@ namespace InventoryManagementApp.ViewModels
             FilteredItems = CollectionViewSource.GetDefaultView(Items);
             FilteredItems.Filter = FilterItems; 
             DataItemsVM.ItemsView = FilteredItems;
+            SendPageInfo();
         }
 
         public async Task HandleInventoryOperation(Operations operation, InventoryItem item)
@@ -121,7 +154,7 @@ namespace InventoryManagementApp.ViewModels
                     break;
             }
 
-            await Refresh();//this is better efficient way to refresh for big data set
+            await Refresh(null, 0, PageSize);//this is better efficient way to refresh for big data set
         }
         
 

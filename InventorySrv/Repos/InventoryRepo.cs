@@ -85,6 +85,29 @@ namespace InventorySrv.Repos
             return await query.ToListAsync();
         }
 
+        public async Task<int> GetAllInventorysNumberAsync(InventoryFilterDto filter)
+        {
+            IQueryable<InventoryItem> query = _context.Inventorys;
+
+            // Apply filters first
+            if (filter != null)
+            {
+                if (!string.IsNullOrWhiteSpace(filter.Name))
+                {
+                    query = query.Where(i => i.Name.Contains(filter.Name, StringComparison.OrdinalIgnoreCase));
+                }
+
+                if (!string.IsNullOrWhiteSpace(filter.Category) && filter.Category != "All")
+                {
+                    query = query.Where(i =>
+                                        i.Category != null &&
+                                        i.Category.ToLower() == filter.Category.ToLower());
+                }
+            }
+            
+            return query.ToListAsync().Result.Count;
+        }
+
         public async Task<InventoryItem?> GetInventoryAsync(Guid id)
         {
             if (this._cache.TryGetValue(id, out var data) && data is InventoryItem Inventory)

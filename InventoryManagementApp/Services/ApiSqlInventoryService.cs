@@ -54,6 +54,11 @@ namespace InventoryManagementApp.Services
             if (!string.IsNullOrWhiteSpace(filter?.SearchCategory))
                 queryParams.Add($"category={Uri.EscapeDataString(filter.SearchCategory)}");
 
+            if (startIndex != null)
+                queryParams.Add($"start={startIndex.Value}");
+            if (endIndex != null)
+                queryParams.Add($"end={endIndex.Value}");
+
             string queryString = queryParams.Count > 0 ? "?" + string.Join("&", queryParams) : "";
 
             var response = await _http.GetAsync(string.Format(ApiEndpoints.GetItems, queryString));

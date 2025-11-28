@@ -14,6 +14,6 @@ namespace InventoryManagementApp.Infras
         public const string UpdateItem = Base + "/patch/{0}"; // PUT v1/patch/items/{id}
         public const string DeleteItem = Base + "/{0}";       // DELETE v1/items/{id}
         public const string GetItemById = Base + "/{0}";      // GET v1/items/{id}
-        public const string GetItems = Base;                   // GET v1/items (with optional query)
+        public const string GetItems = Base + "/{0}";                   // GET v1/items (with optional query)
     }
 }
