@@ -62,6 +62,7 @@ namespace InventoryManagementApp.ViewModels
                 {
                     ID = _currentItem.Id;
                     EditName = _currentItem.Name;
+                    EditBrand = _currentItem.Brand;
                     EditCategory = _currentItem.Category;
                     EditQuantity = _currentItem.Quantity.ToString();
                 }
@@ -94,13 +95,29 @@ namespace InventoryManagementApp.ViewModels
             }
         }
 
+        private string _editBrand = "";
+        public string EditBrand
+        {
+            get => _editBrand;
+            set 
+            {
+                if (_editBrand != value)
+                {
+                    _editBrand = value;
+                    OnPropertyChanged(nameof(EditBrand));
+                    CanAction();
+                }
+            }
+        }
+
+
         private string _editCategory = "Electronics";
         public string EditCategory
         {
             get => _editCategory;
-            set 
-            { 
-                _editCategory = value; 
+            set
+            {
+                _editCategory = value;
                 OnPropertyChanged(nameof(EditCategory));
                 CanAction();
             }
@@ -139,7 +156,8 @@ namespace InventoryManagementApp.ViewModels
         {
             bool canAdd = true;
             if(string.IsNullOrEmpty(EditName)) canAdd = false;
-            if(string.IsNullOrEmpty(EditCategory)) canAdd = false;
+            if (string.IsNullOrEmpty(EditCategory)) canAdd = false;
+            if (string.IsNullOrEmpty(EditBrand)) canAdd = false;
             if (!int.TryParse(EditQuantity, out var quantity) || int.IsNegative(quantity)) 
                 canAdd = false;
             if (canAdd != _canAdd)
@@ -156,6 +174,7 @@ namespace InventoryManagementApp.ViewModels
                 canEdit = false;
             if (string.IsNullOrEmpty(EditName)) canEdit = false;
             if (string.IsNullOrEmpty(EditCategory)) canEdit = false;
+            if (string.IsNullOrEmpty(EditBrand)) canEdit = false;
             if (!int.TryParse(EditQuantity, out var quantity) || int.IsNegative(quantity))
                 canEdit = false;
 
@@ -200,6 +219,7 @@ namespace InventoryManagementApp.ViewModels
                 Id = id ?? Guid.NewGuid(),
                 Name = EditName,
                 Category = EditCategory,
+                Brand = EditBrand,
                 Quantity = int.TryParse(EditQuantity, out int q) ? q : 0,
                 Price = new Random().Next(10, 100)
             };
@@ -210,6 +230,7 @@ namespace InventoryManagementApp.ViewModels
             ID = null;
             EditName = string.Empty;
             EditCategory = "Electronics";
+            EditBrand = string.Empty;
             EditQuantity = string.Empty;
         }
 

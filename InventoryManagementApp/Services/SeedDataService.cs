@@ -26,17 +26,17 @@ namespace InventoryManagementApp.Services
         {
             return new List<InventoryItem>
                 {
-                    new InventoryItem { Name = "Laptop", Category = "Electronics", Quantity = 10 },
-                    new InventoryItem { Name = "Smartphone", Category = "Electronics", Quantity = 25 },
-                    new InventoryItem { Name = "Jeans", Category = "Clothing", Quantity = 50 },
-                    new InventoryItem { Name = "Apple", Category = "Food", Quantity = 100 },
-                    new InventoryItem { Name = "Banana", Category = "Food", Quantity = 150 },
+                    new InventoryItem { Name = "Laptop", Category = "Electronics", Brand = "Brand1", Quantity = 10 },
+                    new InventoryItem { Name = "Smartphone", Category = "Electronics", Brand = "Brand1", Quantity = 25 },
+                    new InventoryItem { Name = "Jeans", Category = "Clothing", Brand = "Brand2", Quantity = 50 },
+                    new InventoryItem { Name = "Apple", Category = "Food", Brand = "Brand1", Quantity = 100 },
+                    new InventoryItem { Name = "Banana", Category = "Food", Brand = "Brand3", Quantity = 150 },
                     
-                    new InventoryItem { Name = "Laptop", Category = "Electronics", Quantity = 10 },
-                    new InventoryItem { Name = "Smartphone", Category = "Electronics", Quantity = 25 },
-                    new InventoryItem { Name = "Jeans", Category = "Clothing", Quantity = 50 },
-                    new InventoryItem { Name = "Apple", Category = "Food", Quantity = 100 },
-                    new InventoryItem { Name = "Banana", Category = "Food", Quantity = 150 }
+                    new InventoryItem { Name = "Laptop", Category = "Electronics", Brand = "Brand4", Quantity = 10 },
+                    new InventoryItem { Name = "Smartphone", Category = "Electronics", Brand = "Brand1", Quantity = 25 },
+                    new InventoryItem { Name = "Jeans", Category = "Clothing", Brand = "Brand1", Quantity = 50 },
+                    new InventoryItem { Name = "Apple", Category = "Food", Brand = "Brand1", Quantity = 100 },
+                    new InventoryItem { Name = "Banana", Category = "Food", Brand = "Brand2", Quantity = 150 }
                 };
         }
 

@@ -23,17 +23,22 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
                 <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="*" />
+                <DataGridTextColumn Header="Brand" Binding="{Binding Brand}" Width="*" />
                 <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="Auto" />
             </DataGrid.Columns>
         </DataGrid>
 
         <!-- Page Control -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-            <Button Content="Previous" Command="{Binding PreviousCommand}" Width="80"/>
+            <Button Content="Previous" Command="{Binding PreviousCommand}"
+                    Width="80" Height="32"
+                    Style="{StaticResource Button3D}"/>
             <TextBlock Text="{Binding CurrentPage}" Margin="5"/>
             <TextBlock Text="/" Margin="2"/>
             <TextBlock Text="{Binding TotalPages}" Margin="5"/>
-            <Button Content="Next" Command="{Binding NextCommand}" Width="80" />
+            <Button Content="Next" Command="{Binding NextCommand}"
+                    Width="80" Height="32"
+                    Style="{StaticResource Button3D}" />
         </StackPanel>
     </Grid>
 </UserControl>

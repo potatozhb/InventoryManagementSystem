@@ -14,11 +14,20 @@
                   ItemsSource="{Binding Categories}" 
                   SelectedItem="{Binding EditCategory, UpdateSourceTrigger=PropertyChanged}" />
         <TextBox Width="100" Margin="0,0,10,0"                 
-                 Style="{StaticResource QuantityWatermarkTextBox}"
-                 Text="{Binding EditQuantity, UpdateSourceTrigger=PropertyChanged}" />
+          Style="{StaticResource BrandWatermarkTextBox}"
+          Text="{Binding EditBrand, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox Width="100" Margin="0,0,10,0"                 
+          Style="{StaticResource QuantityWatermarkTextBox}"
+          Text="{Binding EditQuantity, UpdateSourceTrigger=PropertyChanged}" />
 
-        <Button Content="Add" Width="80" Margin="0,0,10,0" Command="{Binding AddCommand}" />
-        <Button Content="Edit" Width="80" Margin="0,0,10,0" Command="{Binding EditCommand}" />
-        <Button Content="Delete" Width="80" Command="{Binding DeleteCommand}" />
+        <Button Content="Add" Width="80" Height="32" Margin="0,0,10,0"
+                Style="{StaticResource Button3D}"
+                Command="{Binding AddCommand}" />
+        <Button Content="Edit" Width="80" Height="32" Margin="0,0,10,0"
+                Style="{StaticResource Button3D}"
+                Command="{Binding EditCommand}" />
+        <Button Content="Delete" Width="80" Height="32"
+                Style="{StaticResource Button3D}"
+                Command="{Binding DeleteCommand}" />
     </StackPanel>
 </UserControl>

@@ -65,7 +65,6 @@
         </Setter>
     </Style>
 
-
     <Style TargetType="TextBox" x:Key="QuantityWatermarkTextBox">
         <Setter Property="Background" Value="White" />
         <Setter Property="Foreground" Value="Black"/>
@@ -76,21 +75,150 @@
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
                     <Border 
-                    Background="{TemplateBinding Background}" 
-                    BorderBrush="{TemplateBinding BorderBrush}" 
-                    BorderThickness="{TemplateBinding BorderThickness}" 
-                    CornerRadius="4">
+                Background="{TemplateBinding Background}" 
+                BorderBrush="{TemplateBinding BorderBrush}" 
+                BorderThickness="{TemplateBinding BorderThickness}" 
+                CornerRadius="4">
                         <Grid>
                             <ScrollViewer x:Name="PART_ContentHost"/>
                             <TextBlock Text="Item Quantity"
+                           Foreground="Gray"
+                           Margin="4,2,0,0"
+                           IsHitTestVisible="False"
+                           Visibility="{Binding Text.IsEmpty, 
+                                RelativeSource={RelativeSource TemplatedParent},
+                                Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style TargetType="TextBox" x:Key="BrandWatermarkTextBox">
+        <Setter Property="Background" Value="White" />
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="BorderBrush" Value="Gray" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="4">
+                        <Grid>
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                            <TextBlock Text="Item Brand"
                                Foreground="Gray"
                                Margin="4,2,0,0"
                                IsHitTestVisible="False"
-                               Visibility="{Binding Text.IsEmpty, 
+                               Visibility="{Binding Text.IsEmpty,
                                     RelativeSource={RelativeSource TemplatedParent},
                                     Converter={StaticResource BoolToVisibilityConverter}}"/>
                         </Grid>
                     </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 3D Button Style -->
+    <Style TargetType="Button" x:Key="Button3D">
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <!-- Outer shadow border for depth -->
+                        <Border x:Name="OuterBorder"
+                                CornerRadius="18"
+                                Background="#40000000"
+                                Margin="0,2,0,0"/>
+
+                        <!-- Main button border -->
+                        <Border x:Name="MainBorder"
+                                CornerRadius="18"
+                                BorderThickness="2"
+                                Margin="0,0,0,2">
+                            <Border.BorderBrush>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#555555" Offset="0"/>
+                                    <GradientStop Color="#222222" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.BorderBrush>
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#AAAAAA" Offset="0"/>
+                                    <GradientStop Color="#888888" Offset="0.5"/>
+                                    <GradientStop Color="#666666" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+
+                            <!-- Inner highlight for 3D effect -->
+                            <Border CornerRadius="16" Margin="2">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,0.3">
+                                        <GradientStop Color="#40FFFFFF" Offset="0"/>
+                                        <GradientStop Color="Transparent" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Margin="{TemplateBinding Padding}"/>
+                            </Border>
+                        </Border>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <!-- Hover effect -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="MainBorder" Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#BBBBBB" Offset="0"/>
+                                        <GradientStop Color="#999999" Offset="0.5"/>
+                                        <GradientStop Color="#777777" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+
+                        <!-- Pressed effect -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="MainBorder" Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#666666" Offset="0"/>
+                                        <GradientStop Color="#888888" Offset="0.5"/>
+                                        <GradientStop Color="#AAAAAA" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="MainBorder" Property="Margin" Value="0,1,0,1"/>
+                            <Setter TargetName="OuterBorder" Property="Margin" Value="0,1,0,1"/>
+                        </Trigger>
+
+                        <!-- Disabled effect -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="MainBorder" Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#CCCCCC" Offset="0"/>
+                                        <GradientStop Color="#AAAAAA" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground" Value="#888888"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
